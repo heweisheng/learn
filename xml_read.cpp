@@ -62,6 +62,25 @@ xml_pack* xml_init()
 	pack->use=0;
 	return pack;
 }
+void xml_copy2(xml_pack *pack)
+{
+	buffer **p;
+	p=pack->type;
+	int i=pack->size;
+	pack->size*=2;
+	printf("111");
+	mallocif(pack->type=(buffer **)malloc(sizeof(buffer *)*pack->size));
+	memcpy(pack->type,p,pack->size*sizeof(buffer*)/2);
+	p=pack->value;
+	mallocif(pack->value=(buffer **)malloc(sizeof(buffer *)*pack->size));
+	memcpy(pack->value,p,pack->size*sizeof(buffer*)/2);
+	for(;i<pack->size;i++)
+	{
+		pack->type[i]=buffer_init(0);
+		pack->value[i]=buffer_init(0);
+	}
+	printf("222\n");
+}
 void xml_del(xml_pack *pack)/*无实体*/
 {
 	int i=0;
@@ -79,44 +98,49 @@ xml_pack* xml_read(buffer *buff)
 	xml_pack *pack;
 	buffer *mes;
 	pack=xml_init();
-	int use=0;
+	size_t use=0;
 	int read=0;
 	int i=0;
 	int entity=0;
 	while(1)
 	{
+		printf("use %d\n",use);
 		while(i<buff->use&&ptr[i++]!='<');
 		if(buff->use==i)
 			break;
-			mes=pack->type[use];
-			mes->ptr=ptr+i;
-			if(ptr[i++]!='/')
+		mes=pack->type[use];
+		mes->ptr=ptr+i;
+		if(ptr[i++]!='/')
+		{
+			i--;
+			while(i<buff->use&&ptr[i++]!='>')
 			{
-				i--;
-				while(i<buff->use&&ptr[i++]!='>')
-				{
-					mes->use++;
-				}
-				mes=pack->value[use];
-				mes->ptr=ptr;
-				use++;
-				read++;
-				continue;
+				mes->use++;
 			}
-			else
+			mes=pack->value[use];
+			mes->ptr=ptr;
+			use++;
+			read++;
+		}
+		else
+		{
+			for(entity=read-1;entity!=-1;entity--)
 			{
-				for(entity=read-1;entity!=-1;entity--)
+				buffer *c=pack->type[entity];
+				buffer *p=pack->value[entity];
+				if(strncmp(c->ptr,ptr+i,c->use)==0)
 				{
-					buffer *c=pack->type[entity];
-					buffer *p=pack->value[entity];
-					if(strncmp(c->ptr,ptr+i,c->use)==0)
-					{
-						p->ptr=c->ptr+c->use+1;
-						p->use=ptr+i-(c->ptr)-c->use-3;						
-						break;					
-					}
+					p->ptr=c->ptr+c->use+1;
+					p->use=ptr+i-(c->ptr)-c->use-3;						
+					break;					
 				}
-			}		
+			}
+		}
+		if(use>=pack->size)
+		{
+			//printf("22\n");
+			xml_copy2(pack);
+		}		
 	}
 	pack->use=use;
 	return pack;
@@ -125,13 +149,17 @@ int main()
 {
 	xml_pack *sec;
 	char xml_mes[]="<name>我是徐茅山</name>\
-	<age>今年20岁</age>\
-	<sex>男</sex>\
+<age>今年20岁</age>\
+<sex>男</sex>\
+<name>我是徐茅山</name>\
+<name>我是徐茅山</name>\
+<name>我是徐茅山</name>\
+<name>我是徐茅山</name>\
    ";
 	buffer *xml=buffer_init(sizeof(xml_mes));
 	strcpy(xml->ptr,xml_mes); 
 	xml->use=sizeof(xml_mes);
-	printf("%s\n %d\n",xml->ptr,xml->size);
+	//printf("%s\n %d\n",xml->ptr,xml->size);
 	xml_pack *getmes=xml_read(xml);
 	int i=0;
 	int j=0;
