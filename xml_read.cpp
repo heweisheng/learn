@@ -92,12 +92,14 @@ void xml_reset(xml_pack *pack)
 {
 	pack->use=0;
 }
-xml_pack* xml_read(buffer *buff)
+xml_pack* xml_read(buffer *buff,xml_pack *pack)
 {
+	if(pack==NULL)
+   		pack=xml_init();
+   	else
+   		xml_reset(pack);
 	char *ptr=buff->ptr;
-	xml_pack *pack;
 	buffer *mes;
-	pack=xml_init();
 	size_t use=0;
 	int read=0;
 	int i=0;
@@ -147,7 +149,6 @@ xml_pack* xml_read(buffer *buff)
 }
 int main()
 {
-	xml_pack *sec;
 	char xml_mes[]="<name>我是徐茅山</name>\
 <age>今年20岁</age>\
 <sex>男</sex>\
@@ -156,11 +157,12 @@ int main()
 <name>我是徐茅山</name>\
 <name>我是徐茅山</name>\
    ";
+    xml_pack *pack=NULL;
 	buffer *xml=buffer_init(sizeof(xml_mes));
 	strcpy(xml->ptr,xml_mes); 
 	xml->use=sizeof(xml_mes);
 	//printf("%s\n %d\n",xml->ptr,xml->size);
-	xml_pack *getmes=xml_read(xml);
+	xml_pack *getmes=xml_read(xml,pack);
 	int i=0;
 	int j=0;
 	for(;i<getmes->use;i++)
