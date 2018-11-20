@@ -119,6 +119,10 @@ int buffer_append_string_len(buffer *b, const char *s, size_t s_len) {
 int log_error_write(buffer *log,const char *filename, unsigned int line, const char *fmt, ...) {
 	va_list ap;
 	char *c;
+	buffer_append_string(log, filename);
+	buffer_append_string_len(log, CONST_STR_LEN("."));
+	buffer_append_long(log, line);
+	buffer_append_string_len(log, CONST_STR_LEN("\n"));
 	for(va_start(ap, fmt); *fmt; fmt++) {
 		int d;
 		char *s;
