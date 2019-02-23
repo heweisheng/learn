@@ -6,5 +6,5 @@
 va_list,va_start,va_arg,va_end.函数  
 int log_error_write(buffer *log,const char *filename, unsigned int line, const char *fmt, ...);  
 利用第一个参数做参数读取判断，后面想填啥就填啥，如果要补充其他内容自己扩展吧，我把最好用的几个拿出来了(这个函数真方便)
-# 寒假大计划
-寒假快到了，吸收了一波lighttpd，现在思路涌出，寒假打算做一个基于分时制的c++网络接口，
+# 寒假大计划(硬盘损坏系统坏了还行)  
+凉了233 下个月要比赛去做项目了 咕咕咕
