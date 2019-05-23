@@ -83,6 +83,11 @@ void *threadpool::work(void *arg)//工作线程
 			pthread_mutex_lock(&mutex);//如果所有任务处理完，等待主线程派发新任务 
 		}
 		pthread_mutex_lock(pmutex);//确认其他线程没有抢占资源 
+		if(list==NULL)//防止抢占
+		{
+			pthread_mutex_unlock(pmutex);
+			continue;
+		}
 		thread_mission *point=list;
 		list=list->nextnode;
 		pthread_mutex_unlock(pmutex);
@@ -100,7 +105,6 @@ void *demo(void *arg)
 int main()
 {
 	threadpool t(4);
-	sleep(1);//线程创建好了并不是立马开始工作，bug原因想不出来，内部只有锁会冲突，很迷。去掉会概率发生段错误
 	for(int i=0;i<100;i++)
 	{
 		int *point=new int;
@@ -110,4 +114,3 @@ int main()
 	t.join();
 	return 0;
 }
-
