@@ -8,3 +8,5 @@ int log_error_write(buffer *log,const char *filename, unsigned int line, const c
 利用第一个参数做参数读取判断，后面想填啥就填啥，如果要补充其他内容自己扩展吧，我把最好用的几个拿出来了(这个函数真方便)
 # python
 以前做了一个空课表的APP，曾经想通过爬虫把那个APP完善，结果发现爬出来的内容是图片...想了下实现不了就算了，所以编写了个爬成绩单的脚本，这样就可以不用打开浏览器那么麻烦，直接运行就可以得到图片。
+# 线程池
+内部有bug，留给学习的人解决，pthread_kill才是正确做法。
