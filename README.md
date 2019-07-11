@@ -12,3 +12,5 @@ int log_error_write(buffer *log,const char *filename, unsigned int line, const c
 内部有bug，留给学习的人解决，pthread_kill才是正确做法。
 # 防拷贝
 c++中有些对象不应该被拷贝，要把一个函数声明成不拷贝就需要对copy方法进行private化，这样就无法调用copy函数，编译器也不会生成。关于为什么要有防copy的存在，详细看effective c++的70页。
+# RAIIdemo
+利用构造析构的特点做互斥锁管理demo
