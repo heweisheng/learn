@@ -1,7 +1,7 @@
 # learn
 用于学习，期待与各位一起开发服务器专用库
-# xml
-删除了，思考了下不是太实用，多次指针后不适合处理实际问题，指针创建过多
+# c++11线程池  
+win32环境不能兼容linux的写法(跨域锁技巧无法使用)所以提供了另外一种实现方式，经过测试，linux环境跟win环境都可以使用。
 # log_write利用va宏动态扩充错误日志函数（buffer部分直接拿lighttpd的用），buffer函数的内存重用是lighttpd的精华这里不介绍太多
 va_list,va_start,va_arg,va_end.函数  
 int log_error_write(buffer *log,const char *filename, unsigned int line, const char *fmt, ...);  
